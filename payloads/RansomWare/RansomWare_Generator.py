@@ -4,7 +4,7 @@ import sys
 import os
 from os.path import isfile
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from indicators import print_info, print_prompt, print_warning, print_success
+from UI.indicators import print_info, print_prompt, print_warning, print_success
 
 
 def prompt_input(prompt, default=None, validate=None, error_msg="[!] Invalid input.", allow_empty=False):
