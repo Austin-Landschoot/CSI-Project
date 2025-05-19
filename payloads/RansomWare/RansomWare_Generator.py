@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import base64
+import sys
+import os
 from os.path import isfile
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from indicators import print_info, print_prompt, print_warning, print_success
 
 
