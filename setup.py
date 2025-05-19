@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import os
 import sys
-from indicators import print_info, print_warning, print_success
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from UI.indicators import print_info, print_warning, print_success
 
 
 def is_admin():
