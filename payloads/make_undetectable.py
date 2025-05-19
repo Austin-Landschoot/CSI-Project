@@ -1,12 +1,11 @@
+#!/usr/bin/env python3
 import os
 import argparse
 import argcomplete
 import socket
-from colorama import Fore, init
 from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 from cryptography.hazmat.backends import default_backend
-
-init(autoreset=True)
+from indicators import print_warning, print_success, print_prompt
 
 
 def encrypt(data):
@@ -46,17 +45,18 @@ exec(decrypt(encrypted_payload, decryption_key).decode())
     if 'disable_new_file' in switches:
         with open(input_file, 'w') as file:
             file.write(modified_code)
-        print(f"{Fore.GREEN}Script modified in place: {input_file}")
+        print_success(f"Script modified in place: {input_file}")
     elif output_file:
         with open(output_file, 'w') as file:
             file.write(modified_code)
-        print(f"{Fore.GREEN}Encrypted script saved to: {output_file}")
+        print_success(f"Encrypted script saved to: {output_file}")
 
     if 'remote_key' in switches:
         store_key_remotely(key)
 
 
 def store_key_remotely(key):
+    # Placeholder for remote key
     pass
 
 
@@ -87,11 +87,11 @@ def main():
     output_script = args.output_path or args.output
 
     if not input_script:
-        input_script = input(f"{Fore.GREEN}Enter the path to the script file: ")
+        input_script = input(print_prompt("Enter the path to the script file: "))
 
     while not os.path.isfile(input_script):
-        print(f'{Fore.RED}Invalid file path.')
-        input_script = input(f"{Fore.GREEN}Enter a valid script file path: ")
+        print_warning('Invalid file path.')
+        input_script = input(print_prompt("Enter a valid script file path: "))
 
     switches = []
     if args.disable_new_file:
