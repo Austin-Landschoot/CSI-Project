@@ -1,6 +1,6 @@
 import os
 import sys
-from indicators import print_info, print_warning, print_success
+from UI.indicators import print_info, print_warning, print_success
 
 
 def is_admin():
