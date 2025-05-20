@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from UI.indicators import print_info, print_warning, print_success
+from indicators import print_info, print_warning, print_success
 
 
 def is_admin():
@@ -15,6 +13,18 @@ def is_admin():
     else:
         return os.geteuid() == 0
 
+
+def running_from_project_directory():
+    current_dir = os.path.basename(os.getcwd())
+    if current_dir != "fsoc.C2":
+        return False
+    else:
+        return True
+
+
+if not running_from_project_directory():
+    print_warning("Setup must be run in the fsoc.C2 directory.")
+    sys.exit(1)
 
 if not is_admin():
     print_warning("Not running as root/admin. Please re-run as administrator.")
