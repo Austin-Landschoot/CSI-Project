@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import sys
 from UI.indicators import print_info, print_warning, print_success
