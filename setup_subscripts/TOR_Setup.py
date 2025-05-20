@@ -120,3 +120,5 @@ def main():
     else:
         print_warning("Unsupported OS.")
         sys.exit(1)
+
+main()
