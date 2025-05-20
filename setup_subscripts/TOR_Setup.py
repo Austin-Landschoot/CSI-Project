@@ -39,15 +39,14 @@ def install_tor_unix():
         sys.exit(1)
 
     c2_port = get_valid_port("Port for hidden service (C2 listener, Default: 4444)", "4444")
-    socks_port = get_valid_port("Local SOCKS port (for outgoing proxy, Default: 9050)", "9050")
-
+    
     torrc_path = "/etc/tor/torrc"
     tor_service_dir = "/var/lib/tor/my_hidden_service"
 
-    config = f"""SOCKSPort {socks_port}
-HiddenServiceDir {tor_service_dir}
+    config = f"""HiddenServiceDir {tor_service_dir}
 HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
 """
+
 
     with open(torrc_path, "w") as file:
         file.write(config)
@@ -76,7 +75,6 @@ def install_tor_windows():
         sys.exit(1)
 
     c2_port = get_valid_port("Port for hidden service (C2 listener, Default: 4444)", "4444")
-    socks_port = get_valid_port("Local SOCKS port (for outgoing proxy, Default: 9050)", "9050")
 
     base_path = os.path.join(os.getcwd(), "TOR", "tor")
     torrc_path = os.path.join(base_path, "torrc")
@@ -84,11 +82,11 @@ def install_tor_windows():
     hidden_service_dir = os.path.join(tor_data_dir, "my_hidden_service")
     os.makedirs(hidden_service_dir, exist_ok=True)
 
-    config = f"""SOCKSPort {socks_port}
-DataDirectory {tor_data_dir}
+    config = f"""DataDirectory {tor_data_dir}
 HiddenServiceDir {hidden_service_dir}
 HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
 """
+
 
     with open(torrc_path, "w") as file:
         file.write(config)
