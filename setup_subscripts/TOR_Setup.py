@@ -66,7 +66,7 @@ HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
 
 def install_tor_windows():
     print_info("Extracting TOR Expert Bundle...")
-    bundle_path = os.path.join(os.path.dirname(__file__), "setup_subscripts", "tor-expert-bundle-windows-x86_64-13.5.16.tar.gz")
+    bundle_path = os.path.join(os.path.dirname(__file__), "tor-expert-bundle-windows-x86_64-13.5.16.tar.gz")
     try:
         with tarfile.open(bundle_path, "r:gz") as tar:
             tar.extractall("TOR")
