@@ -31,7 +31,7 @@ def install_tor_unix():
     for manager, command in managers.items():
         if shutil.which(manager):
             print_info(f"Using package manager: {manager}")
-            subprocess.run(command, shell=True)
+            subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             print_success("TOR installed.")
             break
     else:
