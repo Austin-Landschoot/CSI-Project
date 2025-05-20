@@ -20,7 +20,7 @@ managers = {
 
 def get_valid_port(prompt_text, default):
     while True:
-        port = print_prompt(f"{prompt_text} (default: {default}): ") or default
+        port = input(print_prompt(f"{prompt_text} (default: {default}): ")) or default
         if port.isdigit() and 1 <= int(port) <= 65535:
             return port
         else:
