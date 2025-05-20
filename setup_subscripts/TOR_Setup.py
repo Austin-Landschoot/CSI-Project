@@ -97,7 +97,7 @@ HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
     tor_exe = os.path.join(base_path, "tor.exe")
     print_info("Starting TOR with custom config...")
     subprocess.Popen(
-        [tor_exe, "-f", torrc],
+        [tor_exe, "-f", /TOR/tor/torrc],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0
