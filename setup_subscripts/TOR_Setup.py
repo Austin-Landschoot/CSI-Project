@@ -61,7 +61,9 @@ HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
         print_success(f"Your hidden service address: {onion}:{c2_port}")
     else:
         print_warning("Could not read .onion address. It may take a few seconds to generate.")
-
+        
+    with open(os.path.join(os.getcwd(), "server", "hidden_service_port.txt"), "w") as file:
+        file.write(str(c2_port))
 
 def install_tor_windows():
     print_info("Extracting TOR Expert Bundle...")
@@ -113,6 +115,9 @@ HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
         time.sleep(1)
     else:
         print_warning("Could not read .onion address. It may take a few seconds to generate.")
+
+    with open(os.path.join(os.getcwd(), "server", "hidden_service_port.txt"), "w") as file:
+        file.write(str(c2_port))
 
 
 def main():
