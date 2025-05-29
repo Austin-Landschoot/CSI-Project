@@ -1,6 +1,8 @@
 import socket
 import threading
 import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from UI.indicators import print_prompt, print_warning, print_success, print_info
 from crypto_utils.AES_Cipher import encrypt, decrypt
 
