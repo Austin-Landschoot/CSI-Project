@@ -3,6 +3,8 @@ import base64
 import time
 from pathlib import Path
 from os.path import isfile
+import os
+import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from UI.indicators import print_info, print_prompt, print_warning, print_success
 
