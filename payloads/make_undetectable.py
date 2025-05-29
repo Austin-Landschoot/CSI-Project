@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 import os
-import sys
 import argparse
 import argcomplete
-import socket
 from cryptography.hazmat.primitives.ciphers import Cipher, modes, algorithms
 from cryptography.hazmat.backends import default_backend
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from UI.indicators import print_warning, print_success, print_prompt
 
 

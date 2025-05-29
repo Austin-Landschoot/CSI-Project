@@ -5,7 +5,6 @@ import shutil
 import subprocess
 import tarfile
 import time
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from UI.indicators import print_warning, print_success, print_info, print_prompt
 
 # I am only familiar with apt so other tor install commands may not work.
@@ -47,7 +46,6 @@ def install_tor_unix():
 HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
 """
 
-
     with open(torrc_path, "w") as file:
         file.write(config)
     print_info(f"Edited {torrc_path} configuration file.")
@@ -64,6 +62,7 @@ HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
         
     with open(os.path.join(os.getcwd(), "server", "hidden_service_port.txt"), "w") as file:
         file.write(str(c2_port))
+
 
 def install_tor_windows():
     print_info("Extracting TOR Expert Bundle...")
@@ -88,7 +87,6 @@ def install_tor_windows():
 HiddenServiceDir {hidden_service_dir}
 HiddenServicePort {c2_port} 127.0.0.1:{c2_port}
 """
-
 
     with open(torrc_path, "w") as file:
         file.write(config)
@@ -128,5 +126,6 @@ def main():
     else:
         print_warning("Unsupported OS.")
         sys.exit(1)
+
 
 main()

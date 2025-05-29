@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from UI.indicators import print_warning, print_success, print_info, print_prompt
 
 

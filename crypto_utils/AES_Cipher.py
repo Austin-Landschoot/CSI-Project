@@ -28,7 +28,7 @@ def get_key():
 key = get_key()
 
 
-def encrypt(data: bytes):
+def encrypt(data):
     iv = os.urandom(16)
     cipher = Cipher(algorithms.AES(key), modes.CFB(iv), backend=default_backend())
     encryptor = cipher.encryptor()
@@ -36,7 +36,7 @@ def encrypt(data: bytes):
     return b64encode(iv + ct)
 
 
-def decrypt(data: bytes):
+def decrypt(data):
     data = b64decode(data)
     iv = data[:16]
     ct = data[16:]
